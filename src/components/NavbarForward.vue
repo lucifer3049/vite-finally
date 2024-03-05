@@ -21,3 +21,9 @@
         </div>
     </nav>
 </template>
+<style>
+.bg-body-tertiary {
+    --bs-bg-opacity: 1;
+    background-color: rgb(191, 235, 232) !important;
+}
+</style>

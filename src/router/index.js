@@ -12,6 +12,18 @@ const routes = [
         component: () => import('@/views/forward/ProductsView.vue')
       }
     ]
+  },
+  // 404頁面
+  {
+    path: '/:pathMatch(.*)*',
+    component: () => import('@/views/NotFound.vue')
+  },
+  // 404重新導向
+  {
+    path: '/newPage/:pathMatch(.*)*',
+    redirect: {
+      name: '首頁'
+    }
   }
 ]
 
