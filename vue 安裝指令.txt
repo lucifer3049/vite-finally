@@ -26,3 +26,4 @@ npm add -D sass 安裝SASS
 
 npm i bootstrap-icons 
 
+npm install mitt
