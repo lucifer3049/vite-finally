@@ -37,10 +37,10 @@ export default {
             this.$http.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products`)
                 .then((response) => {
                     this.products = response.data.products;
-                    console.log(response.data.products);
+                    this.$httpMessageState(response);
                 })
                 .catch((err) => {
-                    alert(err.data.message);
+                    this.$httpMessageState(err.response);
                 })
         }
     },
@@ -69,6 +69,7 @@ export default {
 .btn.btn-outline-secondary {
     color: rgb(0, 0, 0);
     font-size: 1.6rem;
+
     &:hover {
         color: rgb(255, 255, 255);
     }

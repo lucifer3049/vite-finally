@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import Loading from 'vue-loading-overlay';   
+import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 
 import 'bootstrap';
@@ -9,10 +9,15 @@ import 'bootstrap';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+import $httpMessageState from '@/methods/pushMessageState'
+
 import App from './App.vue'
 import router from './router'
 
 const app = createApp(App)
+
+// 正常來說不建議太多方法掛 Global，這裡可以使用 provide 來處理
+app.config.globalProperties.$httpMessageState = $httpMessageState
 
 app.use(createPinia())
 app.use(router)
