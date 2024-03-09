@@ -10,17 +10,38 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <div class="navbar-nav me-auto">
-                    <router-link to="/products" class="nav-link">產品列表</router-link>
+                    <router-link to="/" class="nav-link">產品列表</router-link>
                 </div>
-                <form class="d-flex justify-content-end" role="search">
+                <!-- <form class="d-flex justify-content-end" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                </form> -->
             </div>
 
         </div>
     </nav>
+    <ToastMessages />
 </template>
+<script>
+import ToastMessages from '@/components/ToastMessages.vue';
+import emitter from '@/methods/eventBus';
+
+export default {
+    components: {
+        ToastMessages,
+    },
+    provide() {
+        return {
+            emitter,
+        }
+    },
+    data() {
+        return {
+
+        }
+    },
+}
+</script>
 <style>
 .bg-body-tertiary {
     --bs-bg-opacity: 1;

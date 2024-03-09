@@ -1,10 +1,13 @@
 <template>
     <!-- 產品列表 -->
     <div class="container">
+        <LoadingPlugin :active="isLoading"></LoadingPlugin>
         <div class="row">
-            <div class="col-md-4" v-for="item in products" :key="item">
+            <div class="col-md-4" v-for="item in  products " :key="item">
                 <div class="card">
-                    <img :src="item.imageUrl" class="card-img-top" alt="...">
+                    <router-link :to="`/product/${item.id}`">
+                        <img :src="item.imageUrl" class="card-img-top" alt="...">
+                    </router-link>
                     <div class="card-body">
                         <h5 class="card-title">{{ item.title }}</h5>
                         <div class="text-right" v-if="item.price">
@@ -14,39 +17,83 @@
                             原價 NT {{ item.origin_price }}
                         </del>
                         <div class="d-grid">
-                            <button type="button" class="btn btn-outline-secondary btn-lg"><i
-                                    class="bi bi-cart"></i></button>
+                            <button type="button" class="btn btn-outline-secondary btn-lg"
+                                @click="addTotheCart(item.id)"><i class="bi bi-cart"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
+            <Pagination :pages="pagination" @emit-pages="getProducts"></Pagination>
         </div>
     </div>
 
 </template>
 
 <script>
+import { ref, onMounted, inject } from 'vue';
+import Pagination from '@/components/PaginationView.vue';
+import axios from 'axios';
+
 export default {
-    data() {
+    components: {
+        Pagination,
+    },
+    setup() {
+        const products = ref([]);
+        const pagination = ref({});
+        const loadingStatus = ref({ loadingItem: "" });
+        const isLoading = ref(false);
+        const $httpMessageState = inject('$httpMessageState');
+
+
+
+
+
+        const getProducts = async (page = 1) => {
+            isLoading.value = true;
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}`);
+                products.value = response.data.products;
+                pagination.value = response.data.pagination;
+                isLoading.value = false;
+                $httpMessageState(response, '成功');
+            } catch (error) {
+                $httpMessageState(error.response, '錯誤訊息');
+            }
+        };
+
+        const addTotheCart = async (id, qty = 1) => {
+            isLoading.value = true;
+            loadingStatus.value.loadingItem = id;
+            const card = {
+                product_id: id,
+                qty,
+            };
+
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`, { data: card });
+                loadingStatus.value.loadingItem = "";
+                isLoading.value = false;
+                $httpMessageState(response, '加入購物車');
+            } catch (error) {
+                $httpMessageState(error.response, '加入購物車失败');
+            }
+        };
+
+        // 在組件中掛載產品數量的數據
+        onMounted(() => {
+            getProducts();
+        })
+
         return {
-            products: [],
+            products,
+            pagination,
+            loadingStatus,
+            isLoading,
+            getProducts,
+            addTotheCart,
         }
-    },
-    methods: {
-        getProducts() {
-            this.$http.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products`)
-                .then((response) => {
-                    this.products = response.data.products;
-                    this.$httpMessageState(response);
-                })
-                .catch((err) => {
-                    this.$httpMessageState(err.response);
-                })
-        }
-    },
-    created() {
-        this.getProducts();
-    },
+    }
 }
 </script>
 

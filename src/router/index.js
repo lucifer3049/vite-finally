@@ -7,9 +7,14 @@ const routes = [
     component: () => import('@/views/FrontendView.vue'),
     children: [
       {
-        path: 'products',
+        path: '',
         name: '產品列表',
         component: () => import('@/views/forward/ProductsView.vue')
+      },
+      {
+        path:'product/:id',
+        name:'產品細節',
+        component:()=> import('@/views/forward/ProductView.vue')
       }
     ]
   },
