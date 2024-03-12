@@ -8,23 +8,19 @@
 </template>
 
 <script>
+import { provide } from 'vue';
 import NavbarForward from '@/components/NavbarForward.vue';
-import emitter from '@/methods/eventBus';
 import ToastMessages from '@/components/ToastMessages.vue';
+import emitter from '@/methods/eventBus';
+
 export default {
     components: {
         NavbarForward,
-        ToastMessages
+        ToastMessages,
     },
-    provide() {
-        return {
-            emitter,
-        }
-    },
-    data() {
-        return {
-
-        }
-    },
+    setup() {
+        provide('emitter', emitter);
+    }
 }
+
 </script>

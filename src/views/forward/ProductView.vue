@@ -22,7 +22,12 @@
                     </div>
                 </div>
             </div>
-            
+            <div class="row ">
+                <div v-for="image in product.imagesUrl" :key="image" class="col-md-8 mx-auto">
+                    <img :src="image" class="img-fluid rounded-start" :alt="image.category">
+                </div>
+            </div>
+
         </div>
 
     </div>
@@ -40,6 +45,7 @@ export default {
         const route = useRoute(); //路由
         const isLoading = ref(false);
 
+
         const getProduct = async () => {
             isLoading.value = true;
             try {
@@ -47,6 +53,7 @@ export default {
                 const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/product/${id}`);
                 product.value = response.data.product;
                 isLoading.value = false;
+                console.log(response.data.product);
                 $httpMessageState(response, '成功取得產品資訊');
             } catch (error) {
                 $httpMessageState(error.response, '成功取得產品資訊');
