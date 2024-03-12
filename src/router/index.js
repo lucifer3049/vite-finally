@@ -15,6 +15,18 @@ const routes = [
         path:'product/:id',
         name:'產品細節',
         component:()=> import('@/views/forward/ProductView.vue')
+      },
+      {
+        path:'cart',
+        name:'購物車',
+        component:()=>import('@/views/forward/CartView.vue')
+      },
+        // 404重新導向
+      {
+        path: '/newPage/:pathMatch(.*)*',
+        redirect: {
+        name: '首頁'
+        }
       }
     ]
   },
@@ -23,13 +35,7 @@ const routes = [
     path: '/:pathMatch(.*)*',
     component: () => import('@/views/NotFound.vue')
   },
-  // 404重新導向
-  {
-    path: '/newPage/:pathMatch(.*)*',
-    redirect: {
-      name: '首頁'
-    }
-  }
+
 ]
 
 const router = createRouter({
