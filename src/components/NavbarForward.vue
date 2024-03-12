@@ -9,8 +9,11 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="navbar-nav me-auto">
+                <div class="navbar-nav">
                     <router-link to="/" class="nav-link">產品列表</router-link>
+                </div>
+                <div class="navbar-nav">
+                    <router-link to="cart" class="nav-link">購物車</router-link>
                 </div>
                 <!-- <form class="d-flex justify-content-end" role="search">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
