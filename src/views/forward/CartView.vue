@@ -1,6 +1,7 @@
 <template>
     <!-- 購物車 -->
     <div class="container">
+
         <LoadingPlugin :active="isLoading"></LoadingPlugin>
         <div class="text-end mt-4">
             <button type="button" class="btn btn-outline-danger" @click="deleteAllCarts">清空購物車</button>
@@ -25,7 +26,8 @@
                         </td>
                         <td>
                             <div class="input-group input-group-sm">
-                                <input type="number" class="form-control" v-model="item.qty" max="20" min="1">
+                                <input type="number" class="form-control" v-model="item.qty" max="20" min="1"
+                                    @blur="updateCart(item)">
                                 <div class="input-group-text">/{{ item.product.unit }}</div>
                             </div>
                         </td>
@@ -34,18 +36,20 @@
                             {{ $filters.currency(item.final_total) }}
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            <button type="button" class="btn btn-outline-danger"
+                                :disabled="status.loadingItem === item.id" @click="removeCartItem(item.id)"><i
+                                    class="bi bi-trash"></i></button>
                         </td>
                     </tr>
                 </template>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="3" class="text-end">總計</td>
+                    <td colspan="4" class="text-end">總計</td>
                     <td class="text-end">{{ $filters.currency(cart.total) }}</td>
                 </tr>
                 <tr v-if="cart.final_total !== cart.total">
-                    <td colspan="3" class="text-end text-success">折扣價</td>
+                    <td colspan="4" class="text-end text-success">折扣價</td>
                     <td class="text-end text-success">
                         {{ $filters.currency(cart.final_total) }}
                     </td>
@@ -60,77 +64,76 @@ img {
     height: 150px;
 }
 </style>
-<!-- <script>
-export default {
-    data() {
-        return {
-            cart: {},
-            loadingStatus: {
-                loadingItem: "",
-            },
-            isLoading: false,
-            form: {
-                user: {
-                    name: '',
-                    email: '',
-                    tel: '',
-                    address: '',
-                },
-                message: '',
-            }
-        }
-    },
-    methods: {
-        getCart() {
-            this.$http.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`)
-                .then((response) => {
-                    this.cart = response.data.data;
-                })
-                .catch((error) => {
-                    this.$httpMessageState(error.response, '錯誤訊息');
-                })
-        }
-    },
-    created() {
-        this.getCart();
-    }
-}
-
-</script> -->
-
-
 <script>
 import axios from 'axios';
 import { ref, onMounted, inject } from 'vue';
+
 
 export default {
     setup() {
         const cart = ref({});
         const isLoading = ref(false);
         const $httpMessageState = inject('$httpMessageState');
+        const status = ref({ loadingItem: '' });  //刪除單一購物車
 
+        // 查詢購物車
         const getCart = async () => {
             isLoading.value = true;
             try {
                 const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`);
                 cart.value = response.data.data;
                 isLoading.value = false;
-                $httpMessageState(response);
+                $httpMessageState(response, status);
                 // console.log(cart.value);
             } catch (error) {
-                $httpMessageState(error.response, '錯誤訊息');
+                $httpMessageState(error.response, status);
                 // console.log(error.response, '錯誤訊息');
             }
 
         };
+        // 刪除全部購物車
         const deleteAllCarts = async () => {
+            isLoading.value = true;
             try {
                 const response = await axios.delete(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/carts`);
-                $httpMessageState(response, '清除購物車');
+                $httpMessageState(response, status);
                 getCart();
             } catch (error) {
-                $httpMessageState(error.response, '清除購物車');
-                // alert(error);
+                $httpMessageState(error.response, status);
+                isLoading.value = false;
+
+            }
+        };
+        // 刪除單一購物車產品
+        const removeCartItem = async (id) => {
+            isLoading.value = true;
+            try {
+                status.value.loadingItem = id;
+                const response = await axios.delete(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart/${id}`);
+                $httpMessageState(response, status);
+                status.value.loadingItem = '';
+                isLoading.value = false;
+                getCart();
+            } catch (error) {
+                $httpMessageState(error.response, status);
+                isLoading.value = false;
+            }
+        };
+
+        const updateCart = async (data) => {
+            isLoading.value = true;
+            const cart = {
+                product_id: data.product_id,
+                qty: data.qty,
+            };
+            try {
+                const response = await axios.put(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart/${data.id}`, { data: cart });
+                isLoading.value = false;
+                $httpMessageState(response, status);
+                getCart();
+            } catch (error) {
+                isLoading.value = false;
+                $httpMessageState(error.response, status);
             }
         }
         onMounted(() => {
@@ -142,6 +145,9 @@ export default {
             getCart,
             isLoading,
             deleteAllCarts,
+            removeCartItem,
+            status,
+            updateCart,
         }
 
     }
