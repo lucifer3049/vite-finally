@@ -9,7 +9,7 @@ import 'bootstrap';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import $httpMessageState from '@/methods/pushMessageState'
+import httpMessageState from '@/methods/pushMessageState'
 
 import { date, currency } from '@/methods/filters'
 
@@ -26,7 +26,7 @@ app.config.globalProperties.$filters={
 
 // 正常來說不建議太多方法掛 Global，這裡可以使用 provide 來處理
 // app.config.globalProperties.$httpMessageState = $httpMessageState;
-app.provide('$httpMessageState', $httpMessageState);
+app.provide('httpMessageState', httpMessageState);
 
 app.use(createPinia())
 app.use(router)
