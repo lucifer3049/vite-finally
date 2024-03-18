@@ -1,10 +1,9 @@
 <template>
     <!-- 購物車 -->
     <div class="container">
-
         <LoadingPlugin :active="isLoading"></LoadingPlugin>
         <div class="text-end mt-4">
-            <button type="button" class="btn btn-outline-danger" @click="deleteAllCarts()">清空購物車</button>
+            <button type="button" class="btn btn-outline-danger" @click="deleteAllCarts()">刪除購物車</button>
         </div>
         <table class="table align-middle">
             <thead>
@@ -57,17 +56,24 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4" class="text-end">總計</td>
+                    <td colspan="5" class="text-end">總計</td>
                     <td class="text-end">{{ $filters.currency(cart.total) }}</td>
                 </tr>
                 <tr v-if="cart.final_total !== cart.total">
-                    <td colspan="4" class="text-end text-success">折扣價</td>
+                    <td colspan="5" class="text-end text-success">折扣價</td>
                     <td class="text-end text-success">
                         {{ $filters.currency(cart.final_total) }}
                     </td>
                 </tr>
             </tfoot>
         </table>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="請輸入優惠卷" v-model="coupon_code">
+            <div class="input-group-append">
+                <button type="button" class="btn btn-outline-success" @click="addCouponCode">套用優惠卷</button>
+            </div>
+        </div>
+
     </div>
 </template>
 <style lang="scss">
@@ -83,11 +89,13 @@ import { ref, onMounted, inject, computed } from 'vue';
 
 export default {
     setup() {
-        const cart = ref({});
-        const isLoading = ref(false);
+        const cart = ref({}); //購物車資料
+        const isLoading = ref(false);//過場動畫
         const httpMessageState = inject('httpMessageState');
         const status = ref({ loadingItem: '' });  //刪除單一購物車
-        const selected = ref(false);
+        const selected = ref(false); //判斷checkbox是否有勾選
+        const coupon_code = ref(''); //優惠卷
+
 
 
         // 查詢購物車
@@ -117,22 +125,21 @@ export default {
                 // const selectedItems = cart.value.carts.filter(item => item.selected);
                 // 檢查是否有複選框被選中
                 const hasSelectedItems = cart.value.carts.some(item => item.selected);
-
                 if (hasSelectedItems) {
                     const selectedItems = cart.value.carts.filter(item => item.selected);
                     // 逐个删除被選中的项目
                     for (const item of selectedItems) {
-                        await removeCartItem(item.id); // 呼叫單一刪除
-                        isLoading.value = false;
+                        // await removeCartItem(item.id); // 呼叫單一刪除
+                        //刪除勾選的時候
+                        await axios.delete(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart/${item.id}`);
                     }
+                    isLoading.value = false;
                 } else {
                     await axios.delete(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/carts`);
                 }
-
                 getCart();
                 // console.log(selectedItems);
                 // $httpMessageState(response, status);
-
             } catch (error) {
                 httpMessageState(error.response, status);
                 isLoading.value = false;
@@ -154,7 +161,7 @@ export default {
                 isLoading.value = false;
             }
         };
-
+        //更新購物車數量
         const updateCart = async (data) => {
             isLoading.value = true;
             const cart = {
@@ -171,30 +178,57 @@ export default {
                 httpMessageState(error.response, status);
             }
         };
+        // 新增優惠卷
+        const addCouponCode = async (data) => {
+            const coupon = {
+                code: data.coupon_code,
+            };
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_APP_URL}api/${import.meta.env.VITE_APP_PATH}/coupon`, { data: coupon });
+                httpMessageState(response, status);
+                getCart();
+
+            } catch (error) {
+                httpMessageState(error.response, status);
+            };
+        }
+        onMounted(() => {
+            getCart();
+        });
+        // 創建一個計算
         const allSelected = computed({
+            // 定義getter函式，用來取得計算屬性的值
             get: () => cart.value.carts && cart.value.carts.every(item => item.selected),
+            // 定義setter函式，用於設定計算屬性的值
             set: (value) => {
+                // 檢查購物車是否有商品
                 if (cart.value.carts) {
+                    // 遍歷購物車的每個商品
                     cart.value.carts.forEach(item => {
+                        // 將商品的選擇狀態設定為value
                         item.selected = value;
                     });
                 }
             },
         });
+        // 定義selectAllItems的函式，用於切換選擇所有商品的狀態
         const selectAllItems = (itemId) => {
+            // 如果提供了itemId，就表示要切換特定商品的選擇狀態
             if (itemId) {
+                // 在購物車中尋找與提供itemId降伏的產品
                 const item = cart.value.carts.find(item => item.id === itemId);
+                // 假如找到商品了
                 if (item) {
+                    // 切換商品的選擇狀態(選擇到取消選擇，或從取消選擇到選擇)
                     item.selected = !item.selected;
                 }
             } else {
+                // 如果未提供itemId，表示要切換所有商品的選擇狀態
+                // 利用allSelected計算的屬性來切換商品的選擇狀態
                 allSelected.value = !allSelected.value;
             }
         };
 
-        onMounted(() => {
-            getCart();
-        });
 
         return {
             cart,
@@ -205,11 +239,12 @@ export default {
             status,
             updateCart,
             httpMessageState,
+            addCouponCode,
+            coupon_code,
 
             selected,
             allSelected,
             selectAllItems,
-
         }
 
     }

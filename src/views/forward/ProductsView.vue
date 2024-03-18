@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { ref, inject, onMounted } from 'vue'; //onMounted,
+import { ref, inject, onMounted } from 'vue';
 import Pagination from '@/components/PaginationView.vue';
 import axios from 'axios';
 
@@ -44,15 +44,16 @@ export default {
         const loadingStatus = ref({ loadingItem: "" });
         const isLoading = ref(false);
         const httpMessageState = inject('httpMessageState');
-        const getProducts = async (page = 1) => {
+        const getProducts = async (page = 1) => { //
             isLoading.value = true;
             try {
+                // const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products`);
                 const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}`);
                 products.value = response.data.products;
                 pagination.value = response.data.pagination;
-                console.log(response.data.products);
+                // console.log(response.data.products);
                 isLoading.value = false;
-                httpMessageState(response, '成功');
+                // httpMessageState(response, '成功');
             } catch (error) {
                 httpMessageState(error.response, '錯誤訊息');
             }
@@ -75,13 +76,10 @@ export default {
                 httpMessageState(error.response, '加入購物車失败');
             }
         };
-
         // 在組件中掛載產品數量的數據
         onMounted(() => {
             getProducts();
         });
-
-        // getProducts();
 
         return {
             products,
