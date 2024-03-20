@@ -13,13 +13,31 @@ import httpMessageState from '@/methods/pushMessageState'
 
 import { date, currency } from '@/methods/filters'
 
+import { defineRule, Form, Field, ErrorMessage, configure } from 'vee-validate';
+import * as AllRules from '@vee-validate/rules';
+import { localize, setLocale } from '@vee-validate/i18n';
+import zhTw from '@/locale/zh_TW.json'
+
 import App from './App.vue'
 import router from './router'
 
+
+const pinia = createPinia()
 const app = createApp(App)
 
+Object.keys(AllRules).forEach(rule => {
+    defineRule(rule, AllRules[rule]);
+});
+
+configure({
+    generateMessage: localize({ zh_TW: zhTw }), //載入繁體中文
+    validateOnBlur: true,//當輸入任何內容直接驗證
+});
+// 預設中文語系
+setLocale('zh-TW');
+
 // 
-app.config.globalProperties.$filters={
+app.config.globalProperties.$filters = {
     date,
     currency,
 };
@@ -30,8 +48,15 @@ app.provide('httpMessageState', httpMessageState);
 
 app.use(createPinia())
 app.use(router)
+app.use(pinia)
 app.use(VueAxios, axios);  //API串接套件
 
 app.component('LoadingPlugin', Loading) //Loading 套件
+
+// 表單驗證
+app.component('FormVee', Form);
+app.component('FieldVee', Field);
+app.component('ErrorMessage', ErrorMessage);
+
 
 app.mount('#app')

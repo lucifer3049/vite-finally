@@ -12,20 +12,25 @@ const routes = [
         component: () => import('@/views/forward/ProductsView.vue')
       },
       {
-        path:'product/:id',
-        name:'產品細節',
-        component:()=> import('@/views/forward/ProductView.vue')
+        path: 'product/:id',
+        name: '產品細節',
+        component: () => import('@/views/forward/ProductView.vue')
       },
       {
-        path:'cart',
-        name:'購物車',
-        component:()=>import('@/views/forward/CartView.vue')
+        path: 'cart',
+        name: '購物車',
+        component: () => import('@/views/forward/CartView.vue')
       },
-        // 404重新導向
+      {
+        path: 'checkout/:orderId',
+        name: '確認付款',
+        component: () => import('@/views/forward/CheckoutView.vue')
+      },
+      // 404重新導向
       {
         path: '/newPage/:pathMatch(.*)*',
         redirect: {
-        name: '首頁'
+          name: '首頁'
         }
       }
     ]

@@ -73,6 +73,8 @@
                 <button type="button" class="btn btn-outline-success" @click="addCouponCode">套用優惠卷</button>
             </div>
         </div>
+        <!-- 表單 -->
+        
 
     </div>
 </template>
@@ -85,6 +87,7 @@ img {
 <script>
 import axios from 'axios';
 import { ref, onMounted, inject, computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 
 export default {
@@ -95,6 +98,8 @@ export default {
         const status = ref({ loadingItem: '' });  //刪除單一購物車
         const selected = ref(false); //判斷checkbox是否有勾選
         const coupon_code = ref(''); //優惠卷
+        const form = ref({ user: { name: '', email: '', tel: '', address: '' }, message: '' });//驗證表單
+        const router = useRoute(); //路由
 
 
 
@@ -191,6 +196,19 @@ export default {
             } catch (error) {
                 httpMessageState(error.response, status);
             };
+        };
+        // 送出訂單
+        const createOrder = async (data) => {
+            const order = {
+                user: data.form,
+            };
+            try {
+                const response = await axios.post(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/order`, { data: order });
+                httpMessageState(response, status);
+                router.push(`checkout/${response.data.orderId}`);
+            } catch (error) {
+                httpMessageState(error.response, status);
+            }
         }
         onMounted(() => {
             getCart();
@@ -245,6 +263,9 @@ export default {
             selected,
             allSelected,
             selectAllItems,
+
+            createOrder,
+            form,
         }
 
     }
