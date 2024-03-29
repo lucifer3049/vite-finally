@@ -12,7 +12,7 @@
                 <span class="page-link" v-if="page === pages.current_page">{{
                 page
             }}</span>
-                <a class="page-link" v-else href="#" @click.prevent="updatePage(page)">{{ page }}</a>
+                <a class="page-link" v-else href="#" @click.prevent="updatePage(page, length)">{{ page }}</a>
             </li>
             <li class="page-item">
                 <a class="page-link" href="#" aria-label="Next" @click.prevent="updatePage(pages.current_page + 1)">

@@ -9,7 +9,7 @@ import 'bootstrap';
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-import httpMessageState from '@/methods/pushMessageState'
+import $httpMessageState from '@/methods/pushMessageState'
 
 import { date, currency } from '@/methods/filters'
 
@@ -22,7 +22,7 @@ import App from './App.vue'
 import router from './router'
 
 
-const pinia = createPinia()
+const pinia = createPinia();
 const app = createApp(App)
 
 Object.keys(AllRules).forEach(rule => {
@@ -43,10 +43,10 @@ app.config.globalProperties.$filters = {
 };
 
 // 正常來說不建議太多方法掛 Global，這裡可以使用 provide 來處理
-// app.config.globalProperties.$httpMessageState = $httpMessageState;
-app.provide('httpMessageState', httpMessageState);
+app.config.globalProperties.$httpMessageState = $httpMessageState;
+// app.provide('httpMessageState', httpMessageState);
 
-app.use(createPinia())
+
 app.use(router)
 app.use(pinia)
 app.use(VueAxios, axios);  //API串接套件

@@ -25,6 +25,7 @@ export default {
     methods: {
         ...mapActions(useToastMessageStore, ['clearToast'])
     },
+
 }
 
 </script>

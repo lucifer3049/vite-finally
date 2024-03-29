@@ -23,14 +23,14 @@
                     </div>
                 </div>
             </div>
-            <Pagination :pages="pagination" @emit-pages="getProducts"></Pagination>
         </div>
+        <Pagination :pages="pagination" @emit-pages="getProducts"></Pagination>
     </div>
 
 </template>
 
 <script>
-import { ref, inject, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import Pagination from '@/components/PaginationView.vue';
 import axios from 'axios';
 
@@ -43,19 +43,16 @@ export default {
         const pagination = ref({});
         const loadingStatus = ref({ loadingItem: "" });
         const isLoading = ref(false);
-        const httpMessageState = inject('httpMessageState');
         const getProducts = async (page = 1) => { //
             isLoading.value = true;
             try {
-                // const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products`);
                 const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}`);
                 products.value = response.data.products;
                 pagination.value = response.data.pagination;
-                // console.log(response.data.products);
                 isLoading.value = false;
-                // httpMessageState(response, '成功');
+                // toastMessage = response;
             } catch (error) {
-                httpMessageState(error.response, '錯誤訊息');
+                alert(error);
             }
         };
 
@@ -71,9 +68,9 @@ export default {
                 const response = await axios.post(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`, { data: card });
                 loadingStatus.value.loadingItem = "";
                 isLoading.value = false;
-                httpMessageState(response);
+                console.log(response);
             } catch (error) {
-                httpMessageState(error.response, '加入購物車失败');
+                alert(error);
             }
         };
         // 在組件中掛載產品數量的數據
@@ -88,7 +85,6 @@ export default {
             isLoading,
             getProducts,
             addTotheCart,
-            httpMessageState,
         }
     }
 }
