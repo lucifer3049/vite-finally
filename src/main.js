@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
+
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/css/index.css';
 
@@ -17,6 +18,9 @@ import { defineRule, Form, Field, ErrorMessage, configure } from 'vee-validate';
 import * as AllRules from '@vee-validate/rules';
 import { localize, setLocale } from '@vee-validate/i18n';
 import zhTw from '@/locale/zh_TW.json'
+
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 import App from './App.vue'
 import router from './router'
@@ -50,6 +54,8 @@ app.config.globalProperties.$httpMessageState = $httpMessageState;
 app.use(router)
 app.use(pinia)
 app.use(VueAxios, axios);  //API串接套件
+app.use(VueSweetalert2); //彈跳視窗
+
 
 app.component('LoadingPlugin', Loading) //Loading 套件
 

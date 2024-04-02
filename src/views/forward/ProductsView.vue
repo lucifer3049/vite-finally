@@ -1,7 +1,8 @@
 <template>
     <!-- 產品列表 -->
     <div class="container">
-        <LoadingPlugin :active="isLoading"></LoadingPlugin>
+        <LoadingPlugin :active="isLoading" :color="color" :loader="loader">
+        </LoadingPlugin>
         <div class="row">
             <div class="col-md-4" v-for="item in  products " :key="item">
                 <div class="card">
@@ -24,6 +25,7 @@
                 </div>
             </div>
         </div>
+
         <Pagination :pages="pagination" @emit-pages="getProducts"></Pagination>
     </div>
 
@@ -33,6 +35,9 @@
 import { ref, onMounted } from 'vue';
 import Pagination from '@/components/PaginationView.vue';
 import axios from 'axios';
+// import Swal from 'sweetalert2';
+import SweetAlert from '@/mixin/sweetAlert';
+
 
 export default {
     components: {
@@ -43,16 +48,21 @@ export default {
         const pagination = ref({});
         const loadingStatus = ref({ loadingItem: "" });
         const isLoading = ref(false);
-        const getProducts = async (page = 1) => { //
+        const color = ref('#007979');
+        const loader = ref('bars');
+
+
+
+        const getProducts = async (page = 1) => {
             isLoading.value = true;
             try {
                 const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}`);
                 products.value = response.data.products;
                 pagination.value = response.data.pagination;
                 isLoading.value = false;
-                // toastMessage = response;
+                SweetAlert.typicalType('成功', '取得產品資訊', 'success');
             } catch (error) {
-                alert(error);
+                // SweetAlert.Swal.typicalType('讀取失敗');
             }
         };
 
@@ -85,6 +95,9 @@ export default {
             isLoading,
             getProducts,
             addTotheCart,
+            color,
+            loader,
+
         }
     }
 }
