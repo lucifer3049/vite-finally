@@ -11,6 +11,11 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
+    "@fortawesome/free-regular-svg-icons": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/vue-fontawesome": "^3.0.6",
     "@vee-validate/i18n": "^4.12.6",
     "@vee-validate/rules": "^4.12.6",
     "axios": "^1.6.7",
@@ -20,6 +25,7 @@
     "pinia": "^2.1.7",
     "sweetalert": "^2.1.2",
     "sweetalert2": "^11.10.7",
+    "swiper": "^11.1.0",
     "vee-validate": "^4.12.6",
     "vue": "^3.4.15",
     "vue-axios": "^3.5.2",

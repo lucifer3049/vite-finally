@@ -27,7 +27,7 @@
         color: #000;
         font-weight: bold;
         &:hover {
-          background-color: rgb(198 186 130);
+          background-color: rgba(87, 87, 86, 0.162);
           color: #fffefe;
         }
       }
@@ -267,7 +267,7 @@
       display: none;
       min-width: 100vw;
       margin-top: 3rem;
-
+ 
       .navbar-ul {
         flex-direction: column;
         list-style-type: none;

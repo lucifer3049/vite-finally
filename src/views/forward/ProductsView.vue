@@ -1,12 +1,14 @@
 <template>
+  
     <!-- 產品列表 -->
     <div class="container">
         <LoadingPlugin :active="isLoading" :color="color" :loader="loader">
         </LoadingPlugin>
         <div class="row">
-            <div class="col-md-4" v-for="item in  products " :key="item">
+            <div class="col-md-4 mt-5" v-for="item in products" :key="item">
                 <div class="card">
                     <router-link :to="`/product/${item.id}`">
+                        <!-- <img :src="item.imageUrl" alt=""> -->
                         <img :src="item.imageUrl" class="card-img-top" alt="...">
                     </router-link>
                     <div class="card-body">
@@ -26,7 +28,7 @@
             </div>
         </div>
 
-        <Pagination :pages="pagination" @emit-pages="getProducts"></Pagination>
+        <Pagination class="mt-5" :pages="pagination" @emit-pages="getProducts"></Pagination>
     </div>
 
 </template>
@@ -35,13 +37,12 @@
 import { ref, onMounted } from 'vue';
 import Pagination from '@/components/PaginationView.vue';
 import axios from 'axios';
-// import Swal from 'sweetalert2';
 import SweetAlert from '@/mixin/sweetAlert';
-
 
 export default {
     components: {
         Pagination,
+     
     },
     setup() {
         const products = ref([]);
@@ -50,19 +51,25 @@ export default {
         const isLoading = ref(false);
         const color = ref('#007979');
         const loader = ref('bars');
+        const perPage = ref(9);
 
 
 
-        const getProducts = async (page = 1) => {
+
+        const getProducts = async (page = 1, perPage) => {
+
             isLoading.value = true;
             try {
-                const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}`);
+
+                const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}&perPage=${perPage}`);
                 products.value = response.data.products;
                 pagination.value = response.data.pagination;
                 isLoading.value = false;
-                SweetAlert.typicalType('成功', '取得產品資訊', 'success');
+
+                // SweetAlert.typicalType('成功', '取得產品資訊', 'success');
             } catch (error) {
-                // SweetAlert.Swal.typicalType('讀取失敗');
+                SweetAlert.typicalType(error, error, 'error');
+                isLoading.value = false;
             }
         };
 
@@ -73,14 +80,16 @@ export default {
                 product_id: id,
                 qty,
             };
-
             try {
                 const response = await axios.post(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`, { data: card });
                 loadingStatus.value.loadingItem = "";
                 isLoading.value = false;
-                console.log(response);
+
+                SweetAlert.typicalType('成功', response.data.message, 'success');
+
             } catch (error) {
-                alert(error);
+                SweetAlert.typicalType('失敗', error, 'error');
+                isLoading.value = false;
             }
         };
         // 在組件中掛載產品數量的數據
@@ -97,7 +106,7 @@ export default {
             addTotheCart,
             color,
             loader,
-
+            perPage
         }
     }
 }
@@ -112,11 +121,17 @@ export default {
     transition: transform 0.3s, box-shadow 0.3s;
 
     &:hover {
-        transform: scale(1.1);
+        // transform: scale(1.1);
         /* 鼠标悬停时放大 1.1 倍 */
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         /* 添加阴影 */
     }
+
+    .card-img-top {
+        width: 100%;
+
+    }
+
 }
 
 .btn.btn-outline-secondary {

@@ -30,7 +30,7 @@
                                     @change="selectAllItems(item)">
                             </div>
                         </td>
-                        <td><img :src="item.product.imageUrl" alt=""></td>
+                        <td><img class="img-cart" :src="item.product.imageUrl" alt=""></td>
                         <td>
                             {{ item.product.title }}
                             <div class="text-success" v-if="item.coupon">已套用優惠卷</div>
@@ -120,7 +120,7 @@
     </div>
 </template>
 <style lang="scss">
-img {
+.img-cart {
     width: 150px;
     height: 150px;
 }
