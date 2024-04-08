@@ -118,10 +118,74 @@ export default {
         background: #007aff;
     }
 }
-@media (max-width: 600px){
+
+@media (max-width: 1024px) {
     .swiper {
         width: 100%;
         padding-top: 5rem;
+        
+    }
+}
+
+@media (max-width: 820px) {
+    .swiper {
+        width: 100%;
+        padding-top: 5rem;
+
+        .swiper-button-prev {
+            background-color: #6c6a6a85;
+            color: #ffffff;
+            margin-top: 1rem;
+            padding: 2rem;
+
+            &::after {
+                font-size: 2.5rem;
+                font-weight: 700;
+            }
+        }
+
+        .swiper-button-next {
+            background-color: #6c6a6a85;
+            color: #ffffff;
+            margin-top: 1rem;
+            padding: 2rem;
+
+            &::after {
+                font-size: 2.5rem;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+@media (max-width: 600px) {
+    .swiper {
+        width: 100%;
+        padding-top: 5rem;
+
+        .swiper-button-prev {
+            background-color: #6c6a6a85;
+            color: #ffffff;
+            margin-top: 1rem;
+            padding: 1rem;
+
+            &::after {
+                font-size: 1rem;
+                font-weight: 700;
+            }
+        }
+
+        .swiper-button-next {
+            background-color: #6c6a6a85;
+            color: #ffffff;
+            margin-top: 1rem;
+            padding: 1rem;
+
+            &::after {
+                font-size: 1rem;
+                font-weight: 700;
+            }
+        }
     }
 }
 </style>
