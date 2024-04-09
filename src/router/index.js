@@ -22,6 +22,11 @@ const routes = [
         component: () => import('@/views/forward/CartView.vue')
       },
       {
+        path: 'order',
+        name: '訂單查詢',
+        component: () => import('@/views/forward/OrdersView.vue')
+      },
+      {
         path: 'checkout/:orderId',
         name: '確認付款',
         component: () => import('@/views/forward/CheckoutView.vue')

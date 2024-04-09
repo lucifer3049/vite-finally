@@ -14,7 +14,7 @@
                 <router-link to="/" class="navbar-li">產品列表</router-link>
                 <router-link to="cart" class="navbar-li">購物車</router-link>
                 <router-link to="/" class="navbar-li">關於我們</router-link>
-                <router-link to="/" class="navbar-li">訂單查詢</router-link>
+                <router-link to="order" class="navbar-li">訂單查詢</router-link>
             </ul>
         </div>
     </nav>
