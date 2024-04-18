@@ -6,7 +6,7 @@
 @import './assets/all.scss';
 </style>
 
-<script setup>
+<script>
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 

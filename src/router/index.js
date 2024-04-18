@@ -24,7 +24,7 @@ const routes = [
       {
         path: 'order',
         name: '訂單查詢',
-        component: () => import('@/views/forward/OrdersView.vue')
+        component: () => import('@/views/forward/OrdersView.vue'),
       },
       {
         path: 'checkout/:orderId',

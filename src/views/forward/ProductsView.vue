@@ -1,11 +1,11 @@
 <template>
-  
+
     <!-- 產品列表 -->
     <div class="container">
-        <LoadingPlugin :active="isLoading" :color="color" :loader="loader">
+        <LoadingPlugin :active="productsStore.isLoading" :color="color" :loader="loader">
         </LoadingPlugin>
         <div class="row">
-            <div class="col-md-4 mt-5" v-for="item in products" :key="item">
+            <div class="col-md-4 mt-5" v-for="item in productsStore.products" :key="item">
                 <div class="card">
                     <router-link :to="`/product/${item.id}`">
                         <!-- <img :src="item.imageUrl" alt=""> -->
@@ -21,14 +21,14 @@
                         </del>
                         <div class="d-grid">
                             <button type="button" class="btn btn-outline-secondary btn-lg"
-                                @click="addTotheCart(item.id)"><i class="bi bi-cart"></i></button>
+                                @click="cartStore.addTotheCart(item.id)"><i class="bi bi-cart"></i></button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <Pagination class="mt-5" :pages="pagination" @emit-pages="getProducts"></Pagination>
+        <Pagination class="mt-5" :pages="productsStore.pagination" @emit-pages="productsStore.getProducts"></Pagination>
     </div>
 
 </template>
@@ -36,77 +36,86 @@
 <script>
 import { ref, onMounted } from 'vue';
 import Pagination from '@/components/PaginationView.vue';
-import axios from 'axios';
-import SweetAlert from '@/mixin/sweetAlert';
+import { useProductsStore } from '@/stores/productStore'
+import { useCartStore } from '@/stores/cartStore.js';
+// import axios from 'axios';
+// import SweetAlert from '@/mixin/sweetAlert';
 
 export default {
     components: {
         Pagination,
-     
+
     },
     setup() {
-        const products = ref([]);
-        const pagination = ref({});
-        const loadingStatus = ref({ loadingItem: "" });
-        const isLoading = ref(false);
+        //pinia
+        const productsStore = useProductsStore();
+        const cartStore = useCartStore();
+        // const products = ref([]);
+        // const pagination = ref({});
+        // const loadingStatus = ref({ loadingItem: "" });
+        // const isLoading = ref(false);
         const color = ref('#007979');
         const loader = ref('bars');
-        const perPage = ref(9);
 
 
 
 
-        const getProducts = async (page = 1, perPage) => {
 
-            isLoading.value = true;
-            try {
+        // const getProducts = async (page = 1) => {
 
-                const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}&perPage=${perPage}`);
-                products.value = response.data.products;
-                pagination.value = response.data.pagination;
-                isLoading.value = false;
+        //     isLoading.value = true;
+        //     try {
 
-                // SweetAlert.typicalType('成功', '取得產品資訊', 'success');
-            } catch (error) {
-                SweetAlert.typicalType(error, error, 'error');
-                isLoading.value = false;
-            }
-        };
+        //         const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}`);
+        //         products.value = response.data.products;
+        //         pagination.value = response.data.pagination;
+        //         isLoading.value = false;
 
-        const addTotheCart = async (id, qty = 1) => {
-            isLoading.value = true;
-            loadingStatus.value.loadingItem = id;
-            const card = {
-                product_id: id,
-                qty,
-            };
-            try {
-                const response = await axios.post(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`, { data: card });
-                loadingStatus.value.loadingItem = "";
-                isLoading.value = false;
+        //         // SweetAlert.typicalType('成功', '取得產品資訊', 'success');
+        //     } catch (error) {
+        //         SweetAlert.typicalType(error, error, 'error');
+        //         isLoading.value = false;
+        //     }
+        // };
 
-                SweetAlert.typicalType('成功', response.data.message, 'success');
+        // const addTotheCart = async (id, qty = 1) => {
+        //     isLoading.value = true;
+        //     loadingStatus.value.loadingItem = id;
+        //     const card = {
+        //         product_id: id,
+        //         qty,
+        //     };
+        //     try {
+        //         const response = await axios.post(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`, { data: card });
+        //         loadingStatus.value.loadingItem = "";
+        //         isLoading.value = false;
 
-            } catch (error) {
-                SweetAlert.typicalType('失敗', error, 'error');
-                isLoading.value = false;
-            }
-        };
+        //         SweetAlert.typicalType('成功', response.data.message, 'success');
+
+        //     } catch (error) {
+        //         SweetAlert.typicalType('失敗', error, 'error');
+        //         isLoading.value = false;
+        //     }
+        // };
         // 在組件中掛載產品數量的數據
         onMounted(() => {
-            getProducts();
+            // getProducts();
+            productsStore.getProducts();
         });
 
         return {
-            products,
-            pagination,
-            loadingStatus,
-            isLoading,
-            getProducts,
-            addTotheCart,
+
+            // products,
+            // pagination,
+            // loadingStatus,
+            // isLoading,
+            // getProducts,
+            // addTotheCart,
             color,
             loader,
-            perPage
+
+            productsStore,
+            cartStore
         }
     }
 }
