@@ -267,7 +267,7 @@
       display: none;
       min-width: 100vw;
       margin-top: 3rem;
- 
+
       .navbar-ul {
         flex-direction: column;
         list-style-type: none;
@@ -290,7 +290,7 @@
           left: 0;
           background-color: #fce6cd;
           font-size: 1.6rem;
-
+          z-index: 100;
           &:hover {
             background-color: rgb(198 186 130);
             color: #fffefe;

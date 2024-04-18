@@ -28,6 +28,7 @@
 <script>
 import { ref } from 'vue';
 
+
 export default {
     setup() {
         const isNavbarVisible = ref(false);
@@ -37,13 +38,13 @@ export default {
             isNavbarVisible.value = !isNavbarVisible.value;  //判斷漢堡單開啟或關閉
             isToggle.value = !isToggle.value  //判斷下拉選單開啟或關閉
         };
-
         return {
             isNavbarVisible,
             toggleNavbar,
             isToggle,
+
         }
-    }
+    },
 }
 
 </script>
