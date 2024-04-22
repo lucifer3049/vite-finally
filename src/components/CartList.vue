@@ -1,36 +1,51 @@
 <template>
-    <div class="bg-light p-4 my-3">
+    <div class="bg-light p-4 my-3 ">
         <div class="text-end" v-if="cartStore.cart.carts.length > 0">
             <button type="button" class="btn btn-outline-danger" @click="cartStore.deleteAllCarts()">刪除購物車</button>
         </div>
         <div v-if="!cartStore.cartList.carts.length">購物車沒有任何品項</div>
-        <table v-else class="table align-middle mt-3">
-            <tbody>
+        <table v-else class="cart-table align-middle mt-3">
+            <tbody class="cart-tbody">
                 <tr v-for="cart in cartStore.cart.carts" :key="cart.id">
-                    <td width="100">
-                        <div class="input-group">
-                            <input class="form-check-input mt-0" style="margin: auto;" type="checkbox"
-                                v-model="cart.selected" @change="cartStore.toggleItemSelection(cart)">
-                        </div>
-                    </td>
-                    <td width="100">
-                        <img :src="cart.product.imageUrl" class="table-image" :alt="cart.product.title" />
-                    </td>
-                    <td>{{ cart.product.title }}</td>
-                    <td width="200">
-                        <div class="input-group">
-                            <select name="" id="" class="form-select" v-model="cart.qty"
-                                @change="cartStore.updateCart(cart)">
-                                <option :value="i" v-for="i in 20" :key="i">{{ i }}</option>
-                            </select>
-                        </div>
-                    </td>
-                    <!-- 金額 -->
-                    <td width="200" class="text-end">$ {{ $filters.currency(cart.total) }}</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-danger "
-                            @click.prevent="cartStore.removeCartItem(cart.id)"><i class="bi bi-trash"></i></button>
-                    </td>
+                    <div class="cart-checkbox">
+                        <td>
+                            <div class="input-group">
+                                <input class="form-check-input mt-0" style="margin: auto;" type="checkbox"
+                                    v-model="cart.selected" @change="cartStore.toggleItemSelection(cart)">
+                            </div>
+                        </td>
+                    </div>
+                    <div class="cart-img">
+                        <td>
+                            <img :src="cart.product.imageUrl" class="table-image" :alt="cart.product.title" />
+                        </td>
+                    </div>
+
+                    <div class="cart-title">
+                        <td>{{ cart.product.title }}</td>
+                    </div>
+
+                    <div class="cart-qty">
+                        <td>
+                            <div class="input-group">
+                                <select name="" id="" class="form-select" v-model="cart.qty"
+                                    @change="cartStore.updateCart(cart)">
+                                    <option :value="i" v-for="i in 20" :key="i">{{ i }}</option>
+                                </select>
+                            </div>
+                        </td>
+                    </div>
+
+                    <div class="cart-total">
+                        <!-- 金額 -->
+                        <td width="200" class="text-end">$ {{ $filters.currency(cart.total) }}</td>
+                    </div>
+                    <div class="cart-delete">
+                        <td>
+                            <button type="button" class="btn btn-outline-danger "
+                                @click.prevent="cartStore.removeCartItem(cart.id)"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </div>
                 </tr>
             </tbody>
             <tfoot>
@@ -64,6 +79,83 @@
     width: 75px;
     height: 75px;
     object-fit: cover;
+}
+
+@media (max-width: 600px) {
+    .cart-table {
+        // flex-direction: column;
+        // display: flex;
+        // min-height: 6.625rem;
+        // padding: .75rem;
+        // position: relative;
+        background-color: #FFF;
+        width: 100%;
+        table-layout: fixed;
+ 
+
+        .cart-tbody {
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+
+            .cart-checkbox {
+                position: relative;
+                height: 100%;
+                top: 2rem;
+                left: 0.5rem;
+            }
+
+            .cart-img {
+                position: relative;
+                margin-left: 2rem;
+                top: -0.6rem;
+            }
+
+            .cart-title {
+                position: relative;
+                left: 7.6rem;
+                top: -5rem;
+                width: 150px;
+                overflow: hidden;
+                /* 隱藏超出容器的文字 */
+                white-space: nowrap;
+                /* 防止文字換行 */
+                text-overflow: ellipsis;
+                /* 在文字溢出時顯示省略號 */
+
+            }
+
+            .cart-qty {
+                position: relative;
+                margin-left: 7.6rem;
+                top: -5rem;
+                width: 6rem;
+            }
+
+            .cart-total {
+                position: relative;
+                margin-left: 13rem;
+                top: -6rem;
+            }
+
+            .cart-delete {
+                position: relative;
+                margin-left: 14rem;
+                top: -5rem;
+            }
+
+
+
+
+
+        }
+
+
+
+    }
+
 }
 </style>
 

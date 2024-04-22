@@ -14,6 +14,13 @@
         </div>
     </nav>
 </template>
+<style>
+@media (max-width: 600px) {
+    .navbar-brand {
+        margin-left: -2rem;
+    }
+}
+</style>
 <script>
 import { useCartStore } from '@/stores/cartStore.js';
 import { computed } from 'vue';
