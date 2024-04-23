@@ -15,9 +15,24 @@
     </nav>
 </template>
 <style>
+.navbar-brand {
+    margin-left: -1.4rem;
+}
+@media (max-width: 1024px) {
+    .navbar-brand {
+        margin-left: -1.3rem;
+    }
+}
+
+@media (max-width: 820px) {
+    .navbar-brand {
+        margin-left: -1.3rem;
+    }
+}
+
 @media (max-width: 600px) {
     .navbar-brand {
-        margin-left: -2rem;
+        margin-left: -1rem;
     }
 }
 </style>
