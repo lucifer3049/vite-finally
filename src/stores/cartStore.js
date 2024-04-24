@@ -9,7 +9,9 @@ export const useCartStore = defineStore('cart', {
       loadingStatus: { loadingItem: "" }, //購物車ID
       isLoading: false, //過場動畫
       status: { loadingItem: "" }, //刪除購物車ID
-      allSelected: false,
+      allSelected: false, //checkbox的狀態
+      coupon_code: '', //新增優惠卷
+      coupons: [],//優惠卷查詢
     };
   },
   actions: {
@@ -23,7 +25,6 @@ export const useCartStore = defineStore('cart', {
           carts: response.data.data.carts.map(item => ({ ...item, selected: false })),
         };
         this.isLoading = false;
-
       } catch (error) {
         this.isLoading = false;
         SweetAlert.typicalType('失敗', error, 'error');
@@ -40,10 +41,8 @@ export const useCartStore = defineStore('cart', {
       try {
         const response = await axios.post(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`, { data: card });
         this.loadingStatus.loadingItem = "";
-
         SweetAlert.typicalType('成功', response.data.message, 'success');
         this.isLoading = false;
-
       } catch (error) {
         SweetAlert.typicalType('失敗', error, 'error');
         this.isLoading = false;
@@ -62,7 +61,6 @@ export const useCartStore = defineStore('cart', {
         this.isLoading = false;
         SweetAlert.typicalType('成功', response.data.message, 'success');
       } catch (error) {
-        // console.log(cart);
         this.isLoading = false;
         SweetAlert.typicalType('失敗', error, 'error');
       }
@@ -75,7 +73,6 @@ export const useCartStore = defineStore('cart', {
         this.status.loadingItem = id;
         const response = await axios.delete(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart/${id}`);
         this.status.loadingItem = '';
-        // console.log(this.status.loadingItem);
         SweetAlert.typicalType('成功', response.data.message, 'success');
         this.isLoading = false;
         this.getCart();
@@ -110,46 +107,32 @@ export const useCartStore = defineStore('cart', {
         this.isLoading = false;
       }
     },
-    // selectAllItems(itemId) {
-    //   if (itemId) {
-    //     const item = this.cart.carts.find(item => item.id === itemId);
-    //     if (item) {
-    //       item.selected = !item.selected;
-    //       // console.log(item);
-    //     }
-    //   } else {
-    //     this.cart.carts.forEach(item => {
-    //       item.selected = !this.allSelected;
-    //     })
-    //   }
-    // }
-    toggleAllItems() {
+
+    // 新增優惠卷
+    async addCouponCode(data) {
+      const coupon = {
+        code: data.coupon_code,
+      };
+      try {
+        const response = await axios.post(`${import.meta.env.VITE_APP_URL}api/${import.meta.env.VITE_APP_PATH}/coupon`, { data: coupon });
+        SweetAlert.typicalType('成功', response.data.message, 'success');
+      } catch (error) {
+        SweetAlert.typicalType('失敗', error, 'error');
+      }
+    },
+
+    toggleAllItems() { //判斷購物車checkbox的勾選或無勾選
       const allSelected = this.allSelected;
       this.cart.carts.forEach(item => {
         item.selected = !allSelected;
       })
     }
-
-    // selectAllItems() {
-    //   const allSelected = this.cart.every(item => item.selected);
-    //   this.cart.carts.forEach(item => {
-    //     item.selected = !allSelected;
-    //   });
-    //   this.allSelected = allSelected;
-    // },
-    // toggleItemSelection(item) {
-    //   item.selected = !item.selected;
-
-    //   this.allSelected = this.cart.every(item => item.selected);
-    // }
-
   },
   getters: {
-    allSelected: (state) => state.cart.carts.every(item => item.selected),
+    allSelected: (state) => state.cart.carts.every(item => item.selected), //購物車的checkbox的勾選
     cartList: ({ cart }) => {
       // https://pinia.vuejs.org/core-concepts/getters.html#accessing-other-stores-getters
       const carts = cart.carts.map((item) => {
-        // console.log(item);
         return {
           ...item,
           subtotal: item.product.price * item.qty,

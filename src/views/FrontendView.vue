@@ -7,7 +7,6 @@
     </div>
 
     <main>
-        <ToastMessages></ToastMessages>
         <router-view></router-view>
     </main>
 </template>
@@ -16,7 +15,6 @@
 import { provide, computed } from 'vue';
 import { useRoute } from 'vue-router'; 
 import NavBar from '@/components/NavBar.vue';
-import ToastMessages from '@/components/ToastMessages.vue';
 import emitter from '@/methods/eventBus';
 import CarouselView from '@/components/CarouselView.vue';
 
@@ -24,7 +22,6 @@ import CarouselView from '@/components/CarouselView.vue';
 export default {
     components: {
         NavBar,
-        ToastMessages,
         CarouselView,
     },
     setup() {

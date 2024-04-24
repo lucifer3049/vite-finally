@@ -12,7 +12,9 @@
         <div class="navbar-links" :class="{ show: isNavbarVisible }">
             <ul class="navbar-ul">
                 <router-link to="/" class="navbar-li">產品列表</router-link>
-                <router-link to="cart" class="navbar-li">購物車</router-link>
+                <router-link to="cart" class="navbar-li"><i class="bi bi-cart"></i>購物車 <span
+                        class="badge rounded-pill bg-danger text-white">{{
+                        cartStore.cartList.totalItems }}</span></router-link>
                 <router-link to="/" class="navbar-li">關於我們</router-link>
                 <router-link to="order" class="navbar-li">訂單查詢</router-link>
             </ul>
@@ -27,12 +29,13 @@
 
 <script>
 import { ref } from 'vue';
-
+import { useCartStore } from '@/stores/cartStore.js';
 
 export default {
     setup() {
         const isNavbarVisible = ref(false);
         const isToggle = ref(false);
+        const cartStore = useCartStore();
 
         const toggleNavbar = () => {
             isNavbarVisible.value = !isNavbarVisible.value;  //判斷漢堡單開啟或關閉
@@ -42,6 +45,8 @@ export default {
             isNavbarVisible,
             toggleNavbar,
             isToggle,
+
+            cartStore,
 
         }
     },

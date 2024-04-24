@@ -18,6 +18,7 @@
 .navbar-brand {
     margin-left: -1.4rem;
 }
+
 @media (max-width: 1024px) {
     .navbar-brand {
         margin-left: -1.3rem;
