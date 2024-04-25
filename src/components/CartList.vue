@@ -1,4 +1,5 @@
 <template>
+    <!-- 購物車列表 -->
     <div class="bg-light p-4 my-3 ">
         <div class="text-end" v-if="cartStore.cart.carts.length > 0">
             <button type="button" class="btn btn-outline-danger" @click="cartStore.deleteAllCarts()">刪除購物車</button>

@@ -67,7 +67,7 @@ export default {
     setup() {
   
         const isLoading = ref(false);//過場動畫
-        const status = ref({ loadingItem: '' });  //刪除單一購物車
+      
         const coupon_code = ref(''); //優惠卷
         const form = reactive({ user: { name: '', email: '', tel: '', address: '' }, message: '' });//驗證表單
         const router = useRoute(); //路由
@@ -114,7 +114,7 @@ export default {
 
             isLoading,
 
-            status,
+   
 
             addCouponCode,
             coupon_code,
