@@ -19,6 +19,7 @@
       display: flex;
       padding-top: 8px;
       justify-content: flex-end;
+      z-index: 100;
       .navbar-li {
         display: inline-block;
         padding: 1rem;
@@ -119,7 +120,7 @@
         right: 0;
         bottom: 0;
         left: 0;
-
+        z-index: 100;
         .navbar-li {
           padding: 0.6rem;
           /*width: 10rem;*/
@@ -129,7 +130,7 @@
           left: 0;
           background-color: #fce6cd;
           font-size: 1.6rem;
-          z-index: 100;
+
           &:hover {
             background-color: rgb(198 186 130);
             color: #fffefe;
@@ -280,7 +281,7 @@
         right: 0;
         bottom: 0;
         left: 0;
-
+        z-index: 100;
         .navbar-li {
           padding: 0.6rem;
           /*width: 10rem;*/
@@ -290,7 +291,7 @@
           left: 0;
           background-color: #fce6cd;
           font-size: 1.6rem;
-          z-index: 100;
+
           &:hover {
             background-color: rgb(198 186 130);
             color: #fffefe;
