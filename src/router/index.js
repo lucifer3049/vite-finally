@@ -36,6 +36,7 @@ const routes = [
         name: '確認付款',
         component: () => import('@/views/forward/CheckoutView.vue')
       },
+
       // 404重新導向
       {
         path: '/newPage/:pathMatch(.*)*',
