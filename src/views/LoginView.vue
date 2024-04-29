@@ -501,6 +501,42 @@
 @media (max-width: 600px) {
     .image-background {
 
+        .login-navbar-container {
+
+            position: fixed;
+
+            /* 固定位置 */
+            top: 0;
+            /* 固定在網頁的頂部 */
+            left: 0;
+            /* 固定在網頁的左側 */
+            right: 0;
+            /* 固定在網頁的右側 */
+
+
+            .login-navbar {
+                position: absolute;
+
+                top: 2rem;
+                /* 或者你想要的任何位置 */
+                left: 3rem;
+                /* 或者你想要的任何位置 */
+                z-index: 1000;
+                /* 確保 .login-navbar 在其他元素之上 */
+
+                font-size: 2rem;
+
+                a {
+                    text-decoration: none;
+                    color: #ffffff;
+
+                    &:hover {
+                        color: #d8d8d8;
+                    }
+                }
+
+            }
+        }
 
         .login-form {
             /*CSS定位方法，將元素固定在視窗的特定位置，可以使用top right bottom left來設定位置 */

@@ -1,11 +1,14 @@
 <template>
     <!-- 圖片輪播 -->
-    <swiper :spaceBetween="30" :effect="'fade'" :navigation="true" :pagination="pagination" :modules="modules"
-        :autoplay="{ delay: 2500, disableOnInteraction: false, }" class="mySwiper">
-        <swiper-slide v-for="(image, index) in images" :key="index">
-            <img :src="image" :alt="`Slide ${index + 1}`">
-        </swiper-slide>
-    </swiper>
+    <div class="col-md-11 mx-auto">
+        <swiper :spaceBetween="30" :effect="'fade'" :navigation="true" :pagination="pagination" :modules="modules"
+            :autoplay="{ delay: 2500, disableOnInteraction: false, }" class="mySwiper">
+            <swiper-slide v-for="(image, index) in images" :key="index">
+                <img :src="image" :alt="`Slide ${index + 1}`">
+            </swiper-slide>
+        </swiper>
+    </div>
+
 </template>
 
 <script>
