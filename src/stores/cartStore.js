@@ -10,6 +10,7 @@ export const useCartStore = defineStore('cart', {
       isLoading: false, //過場動畫
       status: { loadingItem: "" }, //刪除購物車ID
       allSelected: false, //checkbox的狀態
+
       coupon_code: '', //新增優惠卷
       coupons: [],//優惠卷查詢
     };
@@ -122,29 +123,73 @@ export const useCartStore = defineStore('cart', {
     },
 
     toggleAllItems() { //判斷購物車checkbox的勾選或無勾選
-      const allSelected = this.allSelected;
+      const isAllSelected = this.isAllSelected;
       this.cart.carts.forEach(item => {
-        item.selected = !allSelected;
-      })
+        item.selected = !isAllSelected;
+      });
+      this.allSelected = !isAllSelected;
+      this.totalItems = this.cart.carts.reduce((a, b) => a + b.qty, 0);
+    },
+
+    // checkbox單選
+    toggleItemSelection(cartItem) {
+      // 找到購物車項目在購物車陣列中的索引
+      const index = this.cart.carts.findIndex(item => item.id === cartItem.id);
+      // 如果找到該項目索引不為-1
+      if (index !== -1) {
+        // 切換該項目的狀態
+        this.cart.carts[index].selected = !this.cart.carts[index].selected;
+      }
     }
+
   },
   getters: {
-    allSelected: (state) => state.cart.carts.every(item => item.selected), //購物車的checkbox的勾選
+    isAllSelected: (state) => state.cart.carts.every(item => item.selected), //購物車的checkbox的勾選
     cartList: ({ cart }) => {
-      // https://pinia.vuejs.org/core-concepts/getters.html#accessing-other-stores-getters
-      const carts = cart.carts.map((item) => {
+
+      // 包含所有購物車商品
+      const allCarts = cart.carts;
+
+      // 篩選出被選中的商品
+      const selectedCarts = allCarts.filter(item => item.selected);
+
+      // 計算所有商品的總價格和總數量
+      // const total = allCarts.reduce((a, b) => a + (b.product.price * b.qty), 0);
+      const totalItems = allCarts.reduce((a, b) => a + b.qty, 0);
+
+      // 如果沒有商品被選中，直接返回所有商品資訊，但不計算總計
+      if (selectedCarts.length === 0) {
         return {
-          ...item,
-          subtotal: item.product.price * item.qty,
+          total: 0, // 總計為0，表示沒有商品被選中
+          carts: allCarts, // 顯示所有商品資訊
+
+          totalItems, // 顯示所有商品的總數量
         };
-      });
-      const total = carts.reduce((a, b) => a + b.subtotal, 0);
-      const totalItems = carts.reduce((a, b) => a + b.qty, 0); //計算商品數量
+      }
+
+      // 計算選中商品的總價格和總數量
+      const selectedTotal = selectedCarts.reduce((a, b) => a + (b.product.price * b.qty), 0);
+
+
       return {
-        total,
-        carts,
-        totalItems
+        total: selectedTotal,
+        carts: selectedCarts,
+        totalItems: totalItems, //購物車的商品數量
       };
+      // https://pinia.vuejs.org/core-concepts/getters.html#accessing-other-stores-getters
+      // const carts = cart.carts.map((item) => {
+      //   return {
+      //     ...item,
+      //     subtotal: item.product.price * item.qty,
+      //   };
+      // });
+      // const total = carts.reduce((a, b) => a + b.subtotal, 0);
+      // const totalItems = carts.reduce((a, b) => a + b.qty, 0); //計算商品數量
+      // return {
+      //   total,
+      //   carts,
+      //   totalItems
+      // };
     },
   },
 })

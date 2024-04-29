@@ -4,7 +4,7 @@
             <span class="navbar-brand">
                 <div class="input-group">
                     <input class="form-check-input mt-0" style="margin-left: 3.2rem;" type="checkbox"
-                        :checked="cartStore.cart.carts.length > 0 && cartStore.allSelected" @change="toggleSelectAll">
+                        :checked="cartStore.cart.carts.length > 0 && cartStore.isAllSelected" @change="toggleSelectAll">
                 </div>
             </span>
             <button type="button" class="btn nav-link">

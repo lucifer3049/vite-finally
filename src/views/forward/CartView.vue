@@ -4,9 +4,8 @@
         <LoadingPlugin :active="isLoading"></LoadingPlugin>
         <CartNavbar></CartNavbar>
         <CartList></CartList>
-
         <!-- 表單 -->
-        <div class="row ">
+        <!-- <div class="row ">
             <FormVee for="form" class="col-md-6" v-slot="{ errors }" @submit="createOrder">
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
@@ -48,7 +47,7 @@
                     <button type="submit" class="btn btn-outline-primary">送出訂單</button>
                 </div>
             </FormVee>
-        </div>
+        </div> -->
     </div>
 </template>
 <script>
@@ -65,10 +64,9 @@ export default {
         CartList,
     },
     setup() {
-  
+
         const isLoading = ref(false);//過場動畫
-      
-        const coupon_code = ref(''); //優惠卷
+
         const form = reactive({ user: { name: '', email: '', tel: '', address: '' }, message: '' });//驗證表單
         const router = useRoute(); //路由
 
@@ -76,20 +74,6 @@ export default {
 
 
 
-        // 新增優惠卷
-        const addCouponCode = async (data) => {
-            const coupon = {
-                code: data.coupon_code,
-            };
-            try {
-                const response = await axios.post(`${import.meta.env.VITE_APP_URL}api/${import.meta.env.VITE_APP_PATH}/coupon`, { data: coupon });
-                SweetAlert.typicalType('成功', response.data.message, 'success');
-                // getCart();
-
-            } catch (error) {
-                SweetAlert.typicalType('失敗', error, 'error');
-            };
-        };
         // 送出訂單
         const createOrder = async () => {
             const order = form;
@@ -110,15 +94,7 @@ export default {
 
 
         return {
-         
-
             isLoading,
-
-   
-
-            addCouponCode,
-            coupon_code,
-
             createOrder,
             form,
         }

@@ -1,4 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import ReceiverContacts from '@/components/ReceiverContacts.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
         path: 'order',
         name: '訂單查詢',
         component: () => import('@/views/forward/OrdersView.vue'),
+      },
+      {
+        path: 'recipient',
+        name: '訂購人資訊',
+        component: ReceiverContacts
       },
       {
         path: 'checkout/:orderId',

@@ -11,8 +11,9 @@
                     <div class="cart-checkbox">
                         <td>
                             <div class="input-group">
+                                <!--  v-model="cart.selected" -->
                                 <input class="form-check-input mt-0" style="margin: auto;" type="checkbox"
-                                    v-model="cart.selected" @change="cartStore.toggleItemSelection(cart)">
+                                    :checked="cart.selected" @change="cartStore.toggleItemSelection(cart)">
                             </div>
                         </td>
                     </div>
@@ -58,6 +59,7 @@
             <tfoot>
                 <div class="lump-sum">
                     <tr>
+                        <!-- <td colspan="6">總金額 NT$ {{ $filters.currency(cartStore.cartList.total) }}</td> -->
                         <td colspan="6">總金額 NT$ {{ $filters.currency(cartStore.cartList.total) }}</td>
                     </tr>
                 </div>
@@ -70,7 +72,7 @@
             </div>
         </div>
         <div class="text-end" v-if="cartStore.cart.carts.length > 0">
-            <button type="button" class="btn btn-outline-warning" @click="cartStore.deleteAllCarts()">結帳</button>
+            <button type="button" class="btn btn-outline-warning" @click="$router.push('recipient')">結帳</button>
         </div>
     </div>
 </template>

@@ -4,7 +4,7 @@
     <div class="container">
         <LoadingPlugin :active="productsStore.isLoading" :color="color" :loader="loader">
         </LoadingPlugin>
-        <div class="row">
+        <div class="row col-md-10 mx-auto">
             <div class="col-md-4 mt-5" v-for="item in productsStore.products" :key="item">
                 <div class="card">
                     <router-link :to="`/product/${item.id}`">
@@ -47,7 +47,6 @@ export default {
 
     },
     setup() {
-        //pinia
         const productsStore = useProductsStore();
         const cartStore = useCartStore();
         // const products = ref([]);
@@ -56,11 +55,6 @@ export default {
         // const isLoading = ref(false);
         const color = ref('#007979');
         const loader = ref('bars');
-
-
-
-
-
         // const getProducts = async (page = 1) => {
 
         //     isLoading.value = true;
