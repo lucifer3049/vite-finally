@@ -42,17 +42,19 @@
             </div>
         </FormVee>
     </div>
+
+    
 </template>
 <script>
 import { reactive } from 'vue';
 import axios from 'axios';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router'; 
 import SweetAlert from '@/mixin/sweetAlert';
 import { useCartStore } from '@/stores/cartStore.js';
 export default {
     setup() {
         const form = reactive({ user: { name: '', email: '', tel: '', address: '' }, message: '' });
-        const router = useRoute();
+        const router = useRouter();
         const cartStore = useCartStore(); //訪問 Pinia store
 
         const cartItems = cartStore.cart.carts.filter(item => item.selected);
@@ -70,8 +72,8 @@ export default {
                 form.user = {};
                 // cartStore.clearCart(); //清空購物車
             } catch (error) {
-                // console.log(error);
-                SweetAlert.typicalType('失敗', error, 'error');
+                console.log(error);
+                // SweetAlert.typicalType('失敗', error, 'error');
             }
         }
 
