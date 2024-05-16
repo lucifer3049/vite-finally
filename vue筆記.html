@@ -1,0 +1,329 @@
+<!-- 如果想要同時使用v-if跟v-for的話 可以在外層包一個template這樣if就不會渲染到html上 -->
+<template v-if="ii">
+    <tr v-for="i in c" :key="i">
+    </tr>
+</template>
+
+<!-- 與v-if一樣都是用來切換物件的呈現，但他是將物件加入 display:none讓物件上從視覺上消失但她還是存在 -->
+<div v-show=""></div>
+<!-- v-if是用來切換物件呈現，與v-show不一樣的是他會將物件從DOM元素中移除，使用此方式的時候vue的生命週期也會重新計算 -->
+<div v-if></div>
+<!-- 在使用情境上如果會很頻繁的切換的話用v-show會比v-if來的好，因為他不會一直去觸發生命週期的創建與毀滅 -->
+<!-- 如果是在條件很少改變或是元素不需要頻繁切換的話使用v-if會是比較好的選擇 -->
+
+<!-- change處理表單變化的屬性 -->
+<!-- 如何在vue中做一個checkbox -->
+<input class="form-check-input mt-0" type="checkbox" v-model="selected" @change="selectAllItems(item)">
+
+<!-- 並在v-for陣列中放入一個checkbox並綁定selected -->
+<input class="form-check-input mt-0" type="checkbox" v-model="item.selected" @change="selectAllItems(item)">
+
+<!-- 在生命中其中宣告一個const selected = ref(false); 用來判斷checkbox是否有勾選 -->
+<script>
+    // 創建一個計算
+    const allSelected = computed({
+        // 定義getter函式，用來取得計算屬性的值
+        get: () => cart.value.carts && cart.value.carts.every(item => item.selected),
+        // 定義setter函式，用於設定計算屬性的值
+        set: (value) => {
+            // 檢查購物車是否有商品
+            if (cart.value.carts) {
+                // 遍歷購物車的每個商品
+                cart.value.carts.forEach(item => {
+                    // 將商品的選擇狀態設定為value
+                    item.selected = value;
+                });
+            }
+        },
+    });
+    // 定義selectAllItems的函式，用於切換選擇所有商品的狀態
+    const selectAllItems = (itemId) => {
+        // 如果提供了itemId，就表示要切換特定商品的選擇狀態
+        if (itemId) {
+            // 在購物車中尋找與提供itemId降伏的產品
+            const item = cart.value.carts.find(item => item.id === itemId);
+            // 假如找到商品了
+            if (item) {
+                // 切換商品的選擇狀態(選擇到取消選擇，或從取消選擇到選擇)
+                item.selected = !item.selected;
+            }
+        } else {
+            // 如果未提供itemId，表示要切換所有商品的選擇狀態
+            // 利用allSelected計算的屬性來切換商品的選擇狀態
+            allSelected.value = !allSelected.value;
+        }
+    };
+</script>
+<!-- 如果要取得JSON的資料 -->
+<!-- 在assets文件夾中新增一個JSON的文件 例如user.json -->
+<!-- 然後在組件中import引入JSON文件 然後用v-for遍歷資料，這個方式適合靜態使用-->
+
+<!-- 用axios來獲取API的資料 get post put delete -->
+
+<!-- call是javascript的函數，這個方法允許我指定的對象調用函數，他並不需要包一個陣列，他可以直接傳遞結果 -->
+<script>
+    // call使用參考
+    function say(greeting) {
+        console.log(greeting + ' ' + this.firstName + ' ' + this.lastName);
+    }
+
+    var person1 = { firstName: 'Jon', lastName: 'Kup' };
+    say.call(person1, 'Hello'); // Hello Jon Kup
+</script>
+<!-- apply他跟call很相似，apply允許參數作為一個陣列傳遞，所以特別適合處理不確定數量的參數-->
+<script>
+    // apply使用參考
+    function say(greeting) {
+        console.log(greeting + ' ' + this.firstName + ' ' + this.lastName);
+    }
+
+    var person1 = { firstName: 'Jon', lastName: 'Kup' };
+    say.apply(person1, ['Hello']); // Hello Jon Kup
+</script>
+<!-- bind這個方法她會返回一個新的函數，bind的這個方法允許傳遞參數可以是個別引數或是做為一個陣列 -->
+<script>
+    // bind使用參考
+    function say() {
+        console.log('Hello ' + this.firstName + ' ' + this.lastName);
+    }
+
+    var person1 = { firstName: 'Jon', lastName: 'Kup' };
+    var sayHelloJon = say.bind(person1);
+    sayHelloJon(); // Hello Jon Kup
+</script>
+
+<!-- position這個CSS屬性的定位方式有五種 -->
+<!-- 1.static：這是元素的默認值。使用 static 定位的元素不會受到 top、right、bottom 或 left 屬性的影響，並且它們會按照正常的文檔流進行排列。 -->
+<!-- 2.relative：使用 relative 定位的元素相對於其正常位置進行定位。這意味著元素仍然占用其原始位置的空間，但可以使用 top、right、bottom 或 left 屬性進行微調。 -->
+<!-- 3.absolute：使用 absolute 定位的元素相對於最近的非 static 定位的祖先元素進行定位。如果沒有這樣的祖先元素，則相對於初始包含塊。absolute 定位的元素不會受到文檔流的影響，並且可以使用 top、right、bottom 或 left 屬性進行精確定位。 -->
+<!-- 4.fixed：使用 fixed 定位的元素相對於視窗進行定位。這意味著即使頁面滾動，fixed 定位的元素仍然保持在相同的位置。fixed 定位的元素不會受到文檔流的影響，並且可以使用 top、right、bottom 或 left 屬性進行精確定位。 -->
+<!-- 5.sticky：使用 sticky 定位的元素在滾動到一定點時變為 fixed 定位。這意味著元素在滾動到一定點之前會像 relative 定位的元素一樣，但一旦滾動到一定點，它就會像 fixed 定位的元素一樣固定在該位置。sticky 定位的元素可以使用 top、right、bottom 或 left 屬性來指定滾動到何處變為固定定位。 -->
+
+<!-- CSS置中方式 -->
+<style>
+    .p {
+        /* 水平置中 */
+        text-align: center;
+        /* 垂直置中 */
+        min-height: 10em;
+        display: table-cell;
+        vertical-align: middle;
+        /* translate這個屬性可以實現元素的水平和垂直置中。這個方是適合絕對定位的元素 */
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        /* 還能使用flexbox或Grid的方式來實現水平垂直置中 */
+        display: flex;
+        justify-content: center;
+        /* 水平置中 */
+        align-items: center;
+        /* 垂直置中 */
+    }
+</style>
+<!-- this關鍵字是指向函數的調用上下文 -->
+<!-- 全局環境中this是指向全局對象，瀏覽器中是window對象 -->
+<!-- 函数调用中的this：在函数内部，如果函数是通过函数名直接调用的，那么this将指向全局对象（在严格模式下，this将是undefined）。 -->
+<!-- 对象方法中的this：当函数作为对象的方法被调用时，this指向调用该方法的对象。 -->
+<!-- 构造函数中的this：在构造函数中，this指向新创建的实例对象 -->
+<!-- 箭头函数中的this：箭头函数不绑定this，它会捕获其所在（即定义的位置）的上下文的this值，作为自己的this值 -->
+<!-- call、apply和bind方法：这些方法可以改变函数调用时this的指向。 -->
+<!-- 事件处理函数中的this：在事件处理函数中，this通常指向触发事件的元素 -->
+<!-- this的值可以通过new运算符在构造函数中被绑定到新创建的对象上 -->
+<!-- 在函数的return语句中返回一个对象时，this指向的是构造函数的实例 -->
+<!-- 在函数的return语句中返回一个基本类型值时，this指向的是构造函数的实例 -->
+<!-- 在函数的return语句中返回null时，this指向的是构造函数的实例 -->
+<!-- 在函数外有多个对象包围时，尽管函数是被最外层的对象调用，函数中的this值只指向上一级对象 -->
+<!-- 先赋值，后执行：如果先将函数赋值给一个变量，然后通过这个变量调用函数，this将指向全局对象（或undefined在严格模式下） -->
+
+<!-- 全局作用在所有函数外部聲明的變量屬於全局作用域，可以在程序的任何地方訪問 -->
+<!-- 函數作用域：在函數内部声明的變量屬於函數作用域，只能在該函數内部访问。 -->
+<!-- 塊作用域：使用let和const聲明的變量，其作用域限制在聲明它们的代碼塊内。這意味着它们只能在聲明它们的代碼塊内部訪問，而不能在外部訪問 -->
+<!-- var的作用域在函數的作用域中都可以訪問，如果在函數外的話，變量則在全局內都可以做使用 -->
+<!-- let聲明在變量內的作用域訪問，他只能聲明代碼塊內部的訪問，在使用方面是合於for或if -->
+<!-- const 聲名的變量在作用域內可訪問，他的聲明常量是不能被重新賦予變量的，所以他適合用於保持不變的值，例如:配置對象或API中 -->
+
+
+<script>
+    const stringA = '1+1+1';
+    const sum = stringA.split('+').map(Number);
+    const sum1 = sum.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    console.log(sum1);
+
+
+    let expression = "2 + 3 * 4";
+    let result = eval(expression);
+    console.log(result); // 输出 14
+
+
+    function calculate(expression) {
+        const parts = expression.split(/(\+|\-|\*|\/)/);
+        const processed = [];
+
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            switch (part) {
+                case '+':
+                    break;
+                case '-':
+                    processed.push(-1 * Number(parts[++i]));
+                    break;
+                case '*':
+                    processed.push(Number(parts[i - 1]) * Number(parts[++i]));
+                    break;
+                case '/':
+                    processed.push(Number(parts[i - 1]) / Number(parts[++i]));
+                    break;
+                default:
+                    processed.push(Number(part));
+            }
+        }
+
+        return processed.reduce((accumulator, currentValue) => accumulator + currentValue);
+    }
+
+    console.log(calculate("2 + 3 * 4")); // 输出 14
+
+</script>
+
+<!-- ref的優點:是處理字串，數字，布爾值，ref會返回一個響應式引用，可以使用.value來訪問並修改，這種方式會使數據變化更明顯也比較好追蹤 -->
+<!-- reactive的優點:是處理對象類型的數據，當我不需要重新賦值使用reactive是一個好選擇，reactive可以直接訪問並修改其屬性，並不需要透過.value來訪問或修改 -->
+
+
+<!-- Proxy物件 -->
+<!-- Handler(黑多洛):控制器，監控Target -->
+<!-- Target(他基特):主要資料內容 -->
+<script>
+    // vue渲染Proxy物件的範例
+    const render = (prop, data) => {
+        const target = document.querySelector('#app'); //會將資料渲染到app這個模板
+        target.innerHTML = `${prop}:${data}`; //data式主要要渲染值
+    }
+    render('name', '飛天小農');
+
+    const handler = {
+        get(obj, prop, value) {
+            console.log('get:', obj, prop, value);
+            return obj[prop]  //這樣newObj才可以將值取出來
+        },
+        set(obj, prop, newVal) {
+            console.log('set:', obj, prop, value);
+            obj[prop] = newVal * 2;  //要加入值的話必須這樣寫
+            render(prop, obj[prop]); //vue3會透過這個方式去渲染proxy物件，資料會雙向綁定
+            return true; //有跳出錯誤的話可以用這個方式告訴他已經執行完畢了
+        }
+    }
+    // 前面一定是物件，後面式控制器
+    const newObj = new Proxy({ a: 1 }, history); //新增一個Proxy物件
+    newObj.a = 2;
+    console.log(newObj);
+
+    setTimeout(() => {
+        newObj.name = '飛天小女僅';
+    }, 2000);
+
+
+</script>
+<!-- composition api的基礎知識點 -->
+<!-- ref:他是一個定義資料方法 -->
+<!-- <script>
+
+    const app = createApp({
+        setup() {
+            const num = ref(1);
+            // 沒有 this
+            function add() {
+                num.value  //ref要取出值會使用value
+            }
+            // 資料，方法，都需要return
+            return {
+                num,
+            }
+        }
+
+
+    })
+
+</script> -->
+<!-- Reactive -->
+<!-- <script>
+    const { createApp, reactive } = Vue;
+
+    const app = createApp({
+        setup() {
+            // reactive一定是物件，因為他是Proxy物件
+            const person = reactive({ name: '飛天小農' });
+
+            person.name = '遁地小孫'; //可以這樣修改reactive的資料
+
+            // 資料，方法，都需要return
+            return {
+                person
+            }
+        }
+
+
+    })
+</script> -->
+<!-- ref的資料處理 -->
+<script>
+    // ref可以定義純值的變數
+
+    const app = createApp({
+        setup() {
+            const num = ref(1);
+            num.value = 5; //ref的值都會存在value裡面要修改值必須加value
+
+            const person = ref({
+                name: '小名',
+                family: {
+                    name: '老王家'
+                }
+            })
+            // 在ref要修改物件裡面的值要在value後面+上物件裡面要修改的值
+            person.value.name = '杰倫';
+            // ref的深層雙向綁定
+            person.value.family.name = '隔壁太太';
+            // ref也可以直接替換物件的值
+            person.value = {
+                name: '孫悟空'
+            }
+            // 資料，方法，都需要return
+            return {
+                num,
+            }
+        }
+
+
+    })
+    // setup是Composition API的一部分，他是組件的入口點，允許在生命週期開始之前設定響應是數據和函數。
+    // 1.setup函數組件的生命週期中執行的最早，甚至在所有生命週期方法和組件掛載前執行，這意味著它可以訪問props，但在之前props還尉解析完成
+    // 2.setup函數必須返回一個對象，這個對象包含模板中使用的響應式數據和方法
+    // 3.setup函數中，變量本身不是響應式的，除非使用ref或reactive來創建響應式數據
+    // 4.setup函數可以接收兩個參數，props和context。props式組件的props，context提供上下文訊息，例如組件的父組件或子組件
+    // 5.setup函數中可以使用ref和reactive來創建響應式數據，ref適合用於原始數據例如(字串，數字，布爾值)以及對象，透過.value屬性來訪問其值。reactive則是專門用於創建響應式的對象，reactive創建一個響應式對象時可以直接訪問其屬性，不需要.value
+    // ref適合用於直接操作DOM元素或管理非響應式的可變數據
+    // reactive適合管理需要在模板或其他響應式代碼中使用的響應式數據
+    // reactive只適用於對象(如Map和Set)
+    // toRef函數可以將reactive對象屬性轉換為ref，從而將響應式對象的特定屬性作ref使用
+
+    // props是用來在父組件及子組件之間傳遞資料，他允許將資料從父組件傳遞到子組件
+    // props只允許父組件向子組件傳遞資料，不能子組件向父組件傳遞資料，如果子組件要修改這些資料要透過發送事件(emit events)來通知父組件進行修改
+    // 在子組件中，需要透過props選項中註冊想要接收的資料，這些資料可以在子組件模板或方法中像使用普通數據屬性一樣使用，在父組件可以通過子組件標籤自定義屬性來傳遞資料
+    // vue允許指定props的類型，從開發模式下提供類型檢查，如果傳遞資料給props的資料不匹配，vue會在控制台警示
+    // props可以設定默認值，這樣即使在父組件沒有提供值，子組件也能有一個預設的值來使用
+    // props在vue中是一個強大的工具，用來實現組件之間的資料傳遞和通性，透過props可以構建更加模塊化和可維護vue
+
+    // https://courses.hexschool.com/courses/vue-202121/lectures/43289820 明天看這篇
+</script>
+
+<!-- VUE生命週期 -->
+<!-- beforeCreate(比佛揆ㄟ) 創建前 在數據還未觀測跟初始化前 -->
+<!-- created(窺ㄟ) 創建後 完成數據觀測，屬性和方法的運算，初始化事件，$el屬性還沒顯示出來 -->
+<!-- beforeMount(比佛忙兒) 載入前 再掛載開始之前被調用，相關於render函數首次被調用，實力已完成以下的配置，編譯模板，把data裡的數據和模板生成html，此時還未掛載到html葉面上 -->
+<!-- mounted(忙特) 載入後 在el背心創建的vm.$el替換，並在掛載前到實例上去後調用，實例已完成以下配置:用上面編譯好的html內容替換el屬性指向的DOM對象，完成模板中的html渲染到html頁面中，此過程進行ajax交互-->
+<!-- beforeUpdate 更新前 在數據更新前調用，發生在虛擬DOM重新渲染和打補釘之前，可以在該鉤子進一步更新莊太，不會觸發附加的重新渲染過程 -->
+<!-- updated 更新後 由於數據更改導致虛擬的DOM重新渲染和補釘之後調用，調用時 組件DOM已經更新，所以可以執行依例DOM的操作，不過在大多數情況下，應該避免此期間更改狀態，因為可能會導致無限循環，該鉤子在服務器渲染期間不被調用 -->
+<!-- beforeDestroy(比佛迪斯豆) 銷毀前 在實力銷毀之前調用，實例任然可以用 -->
+<!-- destroyed(迪私鬥) 銷毀後 在實例銷毀後調用，調用後，所有事件監聽器會被移除，所有子實例也會被銷毀，該鉤子在服務器渲染期間不會被調用 -->
+<!-- 甚麼事生命週期:Vue實例從創建到銷毀的過程就是生命週期，從開始創建->初始化數據->編譯模板->掛載DOM->渲染，更新->渲染，銷毀等一系列過程就剩生命週期 -->
