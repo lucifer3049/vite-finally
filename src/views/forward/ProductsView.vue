@@ -1,5 +1,4 @@
 <template>
-
     <!-- 產品列表 -->
     <div class="container">
         <LoadingPlugin :active="productsStore.isLoading" :color="color" :loader="loader">
@@ -49,48 +48,9 @@ export default {
     setup() {
         const productsStore = useProductsStore();
         const cartStore = useCartStore();
-        // const products = ref([]);
-        // const pagination = ref({});
-        // const loadingStatus = ref({ loadingItem: "" });
-        // const isLoading = ref(false);
+     
         const color = ref('#007979');
         const loader = ref('bars');
-        // const getProducts = async (page = 1) => {
-
-        //     isLoading.value = true;
-        //     try {
-
-        //         const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}`);
-        //         products.value = response.data.products;
-        //         pagination.value = response.data.pagination;
-        //         isLoading.value = false;
-
-        //         // SweetAlert.typicalType('成功', '取得產品資訊', 'success');
-        //     } catch (error) {
-        //         SweetAlert.typicalType(error, error, 'error');
-        //         isLoading.value = false;
-        //     }
-        // };
-
-        // const addTotheCart = async (id, qty = 1) => {
-        //     isLoading.value = true;
-        //     loadingStatus.value.loadingItem = id;
-        //     const card = {
-        //         product_id: id,
-        //         qty,
-        //     };
-        //     try {
-        //         const response = await axios.post(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart`, { data: card });
-        //         loadingStatus.value.loadingItem = "";
-        //         isLoading.value = false;
-
-        //         SweetAlert.typicalType('成功', response.data.message, 'success');
-
-        //     } catch (error) {
-        //         SweetAlert.typicalType('失敗', error, 'error');
-        //         isLoading.value = false;
-        //     }
-        // };
         // 在組件中掛載產品數量的數據
         onMounted(() => {
             // getProducts();
@@ -98,16 +58,8 @@ export default {
         });
 
         return {
-
-            // products,
-            // pagination,
-            // loadingStatus,
-            // isLoading,
-            // getProducts,
-            // addTotheCart,
             color,
             loader,
-
             productsStore,
             cartStore
         }

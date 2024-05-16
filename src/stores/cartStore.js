@@ -89,7 +89,7 @@ export const useCartStore = defineStore('cart', {
       try {
 
         const hasSelectedItems = this.cart.carts.some(item => item.selected);
-        console.log(hasSelectedItems);
+     
         if (hasSelectedItems) {
           const selectedItems = this.cart.carts.filter(item => item.selected);
           for (const item of selectedItems) {

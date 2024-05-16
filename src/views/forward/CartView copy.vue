@@ -2,8 +2,6 @@
     <!-- 舊版購物車 -->
     <div class="container">
         <LoadingPlugin :active="isLoading"></LoadingPlugin>
-   
-
         <div class="text-end mt-4">
             <button type="button" class="btn btn-outline-danger" @click="deleteAllCarts()">刪除購物車</button>
         </div>

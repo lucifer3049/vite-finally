@@ -212,8 +212,6 @@
 
 @media (max-width: 1024px) {
     .image-background {
-
-
         .login-form {
             /*CSS定位方法，將元素固定在視窗的特定位置，可以使用top right bottom left來設定位置 */
             /* position: fixed;

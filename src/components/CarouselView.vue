@@ -1,14 +1,14 @@
 <template>
     <!-- 圖片輪播 -->
-    <div class="col-md-11 mx-auto">
-        <swiper :spaceBetween="30" :effect="'fade'" :navigation="true" :pagination="pagination" :modules="modules"
-            :autoplay="{ delay: 2500, disableOnInteraction: false, }" class="mySwiper">
-            <swiper-slide v-for="(image, index) in images" :key="index">
-                <img :src="image" :alt="`Slide ${index + 1}`">
-            </swiper-slide>
-        </swiper>
-    </div>
-
+        <div class="col-md-11 mx-auto">
+            <swiper :spaceBetween="30" :effect="'fade'" :navigation="true" :pagination="pagination" :modules="modules"
+                :autoplay="{ delay: 2500, disableOnInteraction: false, }" class="mySwiper">
+                <swiper-slide v-for="(image, index) in images" :key="index">
+                    <img :src="image" :alt="`Slide ${index + 1}`">
+                </swiper-slide>
+            </swiper>
+        </div> 
+ 
 </template>
 
 <script>
@@ -61,7 +61,7 @@ export default {
 
 <style lang="scss">
 .swiper {
-    width: 80%;
+    width: 70%;
     max-height: 80rem;
 
     .swiper-slide {
@@ -81,10 +81,10 @@ export default {
     .swiper-button-prev {
         background-color: #6c6a6a85;
         color: #ffffff;
-        padding: 3.4rem;
+        padding: 2rem;
 
         &::after {
-            font-size: 4rem;
+            font-size: 2rem;
             font-weight: 700;
         }
     }
@@ -92,10 +92,10 @@ export default {
     .swiper-button-next {
         background-color: #6c6a6a85;
         color: #ffffff;
-        padding: 3.4rem;
+        padding: 2rem;
 
         &::after {
-            font-size: 4rem;
+            font-size: 2rem;
             font-weight: 700;
         }
     }
