@@ -1,6 +1,5 @@
 <template>
     <!-- 登入 -->
-
     <div class="image-background">
         <LoadingPlugin :active="isLoading"></LoadingPlugin>
         <div class="login-navbar-container">

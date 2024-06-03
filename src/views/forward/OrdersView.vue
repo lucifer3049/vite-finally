@@ -14,7 +14,8 @@
             <div class="card mb-3" v-for="item in filteredOrders" :key="item.id">
                 <div class="row g-0">
                     <!-- <div class="col-md-4">
-                        <img :src="item.product.imageUrl" class="img-fluid rounded-start" alt="...">
+                        <img :src="item.products" class="img-fluid rounded-start" alt="...">
+                        {{ item.products }}
                     </div> -->
                     <div class="col-md-8">
                         <div class="card-body">
@@ -32,6 +33,9 @@
                 </div>
             </div>
         </div>
+        <template v-if="filteredOrders.length > 10">
+            <Pagination class="mt-5" :pages="filteredOrders" @emit-pages="getOrder"></Pagination>
+        </template>
 
     </section>
 
@@ -41,18 +45,25 @@
 import axios from 'axios';
 import { ref, onMounted, computed } from 'vue';
 import SweetAlert from '@/mixin/sweetAlert';
-const orders = ref([]);
-const filterType = ref('all'); //新增一個響應是參考來存儲當前的篩選類型
+import Pagination from '@/components/PaginationView.vue';
 
+const pagination = ref({ products: [] });
+const orders = ref([]);
 const getOrder = async () => {
     try {
         const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/orders`);
         orders.value = response.data.orders;
+        pagination.value = response.data.pagination;
     } catch (error) {
         SweetAlert.typicalType('失敗', error, 'error');
     }
-}
+};
 
+
+
+
+const filterType = ref('all'); //新增一個響應是參考來存儲當前的篩選類型
+// 判斷訂單付款狀態
 const filteredOrders = computed(() => {
     if (filterType.value === 'all') {
         return orders.value; //顯示所有訂單
@@ -73,7 +84,6 @@ const setFilter = (type) => {
 onMounted(async () => {
     await getOrder();
 });
-
 
 </script>
 <style lang="scss">

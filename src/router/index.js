@@ -52,6 +52,12 @@ const routes = [
       }
     ]
   },
+  {
+    // 後台
+    path: '/admin',
+    name: '後台模板',
+    component: () => import('@/views/BackendTemplate.vue')
+  },
   // 404頁面
   {
     path: '/:pathMatch(.*)*',

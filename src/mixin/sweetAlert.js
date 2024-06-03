@@ -12,15 +12,22 @@ export default {
             timer: showConfirmButton === true ? '' : 1500//控制視窗時間到自動消失
         })
     },
-    doubleConfirm() {
-        return Swal.fire({
-            title: '你確定嗎?',
-            text: '你將無法恢復此狀態!',
+    doubleConfirm(title, text, confirmCallback, cancelCallback) {
+        Swal.fire({
+            title: title,
+            text: text,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#b09e63',
             cancelButtonColor: '#000000',
-            confirmButtonText: 'Yes, delete it!',
-        })
-    }
+            confirmButtonText: '是的, 刪除它!',
+            cancelButtonText: '取消',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                confirmCallback();
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                cancelCallback();
+            }
+        });
+    },
 }

@@ -45,7 +45,7 @@ export const useCartStore = defineStore('cart', {
         SweetAlert.typicalType('成功', response.data.message, 'success');
         this.isLoading = false;
       } catch (error) {
-        SweetAlert.typicalType('失敗', error, 'error');
+        SweetAlert.doubleConfirm();
         this.isLoading = false;
       }
     },
@@ -70,18 +70,37 @@ export const useCartStore = defineStore('cart', {
     async removeCartItem(id) {
       this.isLoading = true;
       this.status.loadingItem = id;
-      try {
-        this.status.loadingItem = id;
-        const response = await axios.delete(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart/${id}`);
-        this.status.loadingItem = '';
-        SweetAlert.typicalType('成功', response.data.message, 'success');
-        this.isLoading = false;
-        this.getCart();
-      } catch (error) {
-        SweetAlert.typicalType('失敗', error, 'error');
-        this.isLoading = false;
+      // try {
+      //   SweetAlert.doubleConfirm('title', 'text');
+      //   await axios.delete(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart/${id}`);
+      //   this.status.loadingItem = '';
+      //   this.isLoading = false;
+      //   this.getCart();
+      // } catch (error) {
+      //   SweetAlert.typicalType('失敗', error, 'error');
+      //   this.isLoading = false;
+      // }
+      SweetAlert.doubleConfirm(
+        '確認刪除',
+        '您確定要刪除此項目嗎？',
+        async () => {
+          try {
+            await axios.delete(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/cart/${id}`);
+            this.status.loadingItem = '';
+            this.isLoading = false;
+            this.getCart();
+            SweetAlert.typicalType('成功', '商品已刪除', 'success');
+          } catch (error) {
+            SweetAlert.typicalType('失敗', error.message, 'error');
+            this.isLoading = false;
+          }
+        },
+        () => {
+          this.status.loadingItem = '';
+          this.isLoading = false;
+        }
+      );
 
-      }
     },
     // 刪除全部購物車
     async deleteAllCarts() {
@@ -89,7 +108,7 @@ export const useCartStore = defineStore('cart', {
       try {
 
         const hasSelectedItems = this.cart.carts.some(item => item.selected);
-     
+
         if (hasSelectedItems) {
           const selectedItems = this.cart.carts.filter(item => item.selected);
           for (const item of selectedItems) {
