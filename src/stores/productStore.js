@@ -1,16 +1,15 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
+// import axios from 'axios';
 import SweetAlert from '@/mixin/sweetAlert';
+// import { getProducts } from '@/api/all'
+import { getProducts } from '@/api/product/productApi';
+
 
 export const useProductsStore = defineStore('productsStore', {
   state: () => ({
-    products: [],
-    isLoading: false,
-    pagination: { //分頁
-      page: 1,
-      rowsPerPage: 5,
-      rowsNumber: 0,
-    },
+    products: [], //產品列表
+    isLoading: false, //過廠動畫
+    pagination: {},//分頁
     loadingStatus: { loadingItem: "" },
   }),
   getters: {
@@ -19,10 +18,12 @@ export const useProductsStore = defineStore('productsStore', {
     }
   },
   actions: {
-    async getProducts(page = 1, perPage = 5) {
+    // 前台產品列表page = 1
+    async getProducts() {
       this.isLoading = true;
       try {
-        const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}&perPage=${perPage}`);
+        // const response = await axios.get(`${import.meta.env.VITE_APP_URL}v2/api/${import.meta.env.VITE_APP_PATH}/products?page=${page}`);
+        const response = await getProducts();
         this.products = response.data.products;
         this.pagination = response.data.pagination;
         this.isLoading = false;
